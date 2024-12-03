@@ -30,7 +30,6 @@ const createTableQuery = `
   )
 `;
 
-
 db.run(createTableQuery, (err) => {
   if (err) console.error(err);
 });
@@ -43,23 +42,6 @@ app.get("/api/data", (req, res) => {
     res.json(rows);
   });
 });
-
-// app.post("/api/data", (req, res) => {
-//   const data = req.body;
-//   const columns = Object.keys(data).join(", ");
-//   const placeholders = Object.keys(data)
-//     .map(() => "?")
-//     .join(", ");
-
-//   const sql = `INSERT INTO connections (${columns}) VALUES (${placeholders})`;
-
-//   db.run(sql, Object.values(data), function (err) {
-//     if (err) {
-//       return res.status(400).json({ error: err.message });
-//     }
-//     res.status(201).json({ id: this.lastID });
-//   });
-// });
 
 // Endpoint to add a new record
 app.post('/api/data', (req, res) => {
@@ -81,7 +63,6 @@ app.post('/api/data', (req, res) => {
     });
   });
 });
-
 
 // New route for deleting data by ID
 app.delete("/api/data/:id", (req, res) => {

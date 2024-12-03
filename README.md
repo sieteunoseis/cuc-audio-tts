@@ -41,3 +41,19 @@ chmod 755 ./scripts/git-template-remote.sh
 ```
 
 Script based on https://www.mslinn.com/git/700-propagating-git-template-changes.html
+
+### 2. Get git error: You have divergent branches and need to specify how to reconcile them.
+
+```
+git config pull.rebase false  # merge
+git config pull.rebase true   # rebase
+git config pull.ff only       # fast-forward only
+```
+
+### 3. Get an SQL error when running the app: SQLITE_CANTOPEN: unable to open database file
+
+Make sure the path to the database file is correct in the backend server.
+
+```
+mkdir backend/db
+```
