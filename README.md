@@ -1,4 +1,4 @@
-# React App with Tailwind CSS Boilerplate for Automate Builders
+# CUC Unity App
 
 ## How to use
 
