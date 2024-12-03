@@ -9,6 +9,6 @@
     "sync-remote": "git pull upstream main"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^9.1.0"
   }
 }
