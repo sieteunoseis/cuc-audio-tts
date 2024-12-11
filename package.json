@@ -1,6 +1,6 @@
 {
   "name": "cisco-unity-greetings-tts",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "scripts": {
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "start": "concurrently \"npm run start --prefix frontend\" \"npm run start --prefix backend\"",
