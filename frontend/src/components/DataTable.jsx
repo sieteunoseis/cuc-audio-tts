@@ -18,7 +18,7 @@ const DataTable = ({ data, onDataChange }) => {
 
 
   const handleDelete = async (id) => {
-    const response = await fetch(`http://localhost:${config.backendPort}/api/data/${id}`, {
+    const response = await fetch(`${config.backendUrl}/api/data/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -29,7 +29,7 @@ const DataTable = ({ data, onDataChange }) => {
   };
 
   const selectRecord = async (id) => {
-    const response = await fetch(`http://localhost:${config.backendPort}/api/data/select/${id}`, {
+    const response = await fetch(`${config.backendUrl}/api/data/select/${id}`, {
       method: "PUT",
     });
     if (response.ok) {
