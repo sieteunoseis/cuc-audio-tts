@@ -3,15 +3,25 @@ services:
     image: ghcr.io/sieteunoseis/unity-tts-frontend:master
     ports:
       - "3000:80" # Map port 3000 on host to port 80 in container
+    networks:
+      - unity-network
+    environment:
+      - VITE_BACKEND_URL=http://unity-tts-backend:5001
     env_file:
-      - .env.local
+      - .env
 
   unity-tts-backend:
     image: ghcr.io/sieteunoseis/unity-tts-backend:master
-    # volumes:
-    #   - ./data:/usr/src/app/data
-    #   - ./db:/usr/src/app/db
-    ports:
-      - "5001:5001" # Map port 5001 on host to port 5001 in container
+    volumes:
+      - ./data:/usr/src/app/data
+      - ./db:/usr/src/app/db
+    expose:
+      - "5001"
+    networks:
+      - unity-network
     env_file:
-      - .env.local
+      - .env
+
+networks:
+  unity-network:
+    driver: bridge

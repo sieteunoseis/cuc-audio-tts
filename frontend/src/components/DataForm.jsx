@@ -47,7 +47,7 @@ const DataForm = ({ onDataAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:${config.backendPort}/api/data`, {
+    const response = await fetch(`${config.backendUrl}/api/data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

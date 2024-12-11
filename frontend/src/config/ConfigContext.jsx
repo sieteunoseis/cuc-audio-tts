@@ -6,7 +6,7 @@ const getConfigValues = () => {
   // Development environment
   if (import.meta.env.DEV) {
     return {
-      backendPort: import.meta.env.VITE_BACKEND_PORT || '5001',
+      backendUrl: import.meta.env.VITE_BACKEND_URL || 'http://backend:5001',
       elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY || '',
       brandingUrl: import.meta.env.VITE_BRANDING_URL || 'https://automate.builders',
       brandingName: import.meta.env.VITE_BRANDING_NAME || 'Automate Builders',
@@ -16,7 +16,7 @@ const getConfigValues = () => {
 
   // Production environment
   return {
-    backendPort: window.APP_CONFIG?.BACKEND_PORT || '5001',
+    backendUrl: window.APP_CONFIG?.BACKEND_PORT || 'http://backend:5001',
     elevenLabsApiKey: window.APP_CONFIG?.ELEVENLABS_API_KEY || '',
     brandingUrl: window.APP_CONFIG?.BRANDING_URL || 'https://automate.builders',
     brandingName: window.APP_CONFIG?.BRANDING_NAME || 'Automate Builders',
