@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DataForm from "../components/DataForm";
 import DataTable from "../components/DataTable";
+import { getConfig } from './config';
+const config = getConfig();
 
 function App() {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/data`);
+    const response = await fetch(`http://localhost:${config.backendPort}/api/data`);
     const result = await response.json();
     setData(result);
   };

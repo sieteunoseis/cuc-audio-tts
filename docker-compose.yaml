@@ -1,13 +1,13 @@
 services:
-  frontend:
-    image: ghcr.io/sieteunoseis/frontend:master
+  unity-tts-frontend:
+    image: ghcr.io/sieteunoseis/unity-tts-frontend:master
     ports:
       - "3000:80" # Map port 3000 on host to port 80 in container
     env_file:
       - frontend.env
 
-  backend:
-    image: ghcr.io/sieteunoseis/backend:master
+  unity-tts-backend:
+    image: ghcr.io/sieteunoseis/unity-tts-backend:master
     ports:
       - "5001:5001" # Map port 5001 on host to port 5001 in container
     env_file:
