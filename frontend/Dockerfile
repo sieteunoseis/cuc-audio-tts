@@ -16,6 +16,12 @@ COPY . .
 # Build the Vite app
 RUN npm run build
 
+# Set runtime environment variables
+ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT}
+ENV VITE_ELEVENLABS_API_KEY=${VITE_ELEVENLABS_API_KEY}
+ENV VITE_BRANDING_URL=${VITE_BRANDING_URL}
+ENV VITE_BRANDING_NAME=${VITE_BRANDING_NAME}
+
 # Step 2: Serve the application using Nginx
 FROM nginx:alpine
 
