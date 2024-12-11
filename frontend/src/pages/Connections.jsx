@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DataForm from "../components/DataForm";
 import DataTable from "../components/DataTable";
-import { getConfig } from './config';
-const config = getConfig();
+import { useConfig } from '../config/ConfigContext';
 
 function App() {
+  const config = useConfig();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
