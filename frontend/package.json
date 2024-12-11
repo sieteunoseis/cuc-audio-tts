@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "VITE_BACKEND_PORT=5001 VITE_ELEVENLABS_API_KEY=sk_73e46968b6ab277469d48189ab38bc6d8fa9230487b162c1 vite",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
