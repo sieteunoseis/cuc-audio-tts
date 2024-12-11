@@ -4,6 +4,9 @@ FROM node:20-alpine
 # Add non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
+# Install ffmpeg using Alpine package manager
+RUN apk add --no-cache ffmpeg
+
 # Create app directory and set ownership
 WORKDIR /usr/src/app
 
