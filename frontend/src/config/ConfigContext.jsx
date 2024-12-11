@@ -1,12 +1,15 @@
 // src/config/ConfigContext.jsx
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
 const ConfigContext = createContext(null);
 
 const getConfigValues = () => {
+  // Add debug logs
+  console.log("DEV mode:", import.meta.env.DEV);
+  console.log("Vite env vars:", import.meta.env);
+  console.log("Window config:", window.APP_CONFIG);
   // If running in development (npm run dev)
   if (import.meta.env.DEV) {
-    console.log('Running in development mode');
     return {
       backendPort: import.meta.env.VITE_BACKEND_PORT,
       elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
@@ -25,23 +28,25 @@ const getConfigValues = () => {
     };
   }
 
-  throw new Error('No configuration found');
+  // Provide default values instead of throwing error
+  return {
+    backendPort: "5001",
+    elevenLabsApiKey: "",
+    brandingUrl: "http://automate.builders",
+    brandingName: "Automate Builders",
+  };
 };
 
 export function ConfigProvider({ children }) {
   const config = getConfigValues();
 
-  return (
-    <ConfigContext.Provider value={config}>
-      {children}
-    </ConfigContext.Provider>
-  );
+  return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
 }
 
 export function useConfig() {
   const context = useContext(ConfigContext);
   if (!context) {
-    throw new Error('useConfig must be used within a ConfigProvider');
+    throw new Error("useConfig must be used within a ConfigProvider");
   }
   return context;
 }
