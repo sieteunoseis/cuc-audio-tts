@@ -8,8 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { ElevenLabsClient } from "elevenlabs";
 import { customSelectStyles, selectClassNames } from "@/lib/select-styles";
-import { getConfig } from './config';
-const config = getConfig();
+import { useConfig } from '../config/ConfigContext';
 
 const createOption = (label, value) => ({
   label,
@@ -34,6 +33,7 @@ const enableOptions = [
 const Home = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const config = useConfig();
 
   // Connection state
   const [connectionState, setConnectionState] = useState({

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { NavigationMenu, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { getConfig } from './config';
-const config = getConfig();
+import { useConfig } from '../config/ConfigContext';
 
 export default function Component() {
+  const config = useConfig();
   return (
     <nav className="sticky inset-x-0 top-0 z-50 bg-white shadow-sm px-4 md:px-6 dark:bg-black">
       <div className="flex justify-between h-14 items-center">
