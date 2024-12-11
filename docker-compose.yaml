@@ -1,8 +1,9 @@
 services:
   unity-tts-frontend:
     image: ghcr.io/sieteunoseis/unity-tts-frontend:master
+    container_name: unity-tts-frontend
     ports:
-      - "3000:80" # Map port 3000 on host to port 80 in container
+      - "3001:80" # Map port 3000 on host to port 80 in container
     networks:
       - unity-network
     environment:
@@ -12,6 +13,7 @@ services:
 
   unity-tts-backend:
     image: ghcr.io/sieteunoseis/unity-tts-backend:master
+    container_name: unity-tts-backend
     volumes:
       - ./data:/usr/src/app/data
       - ./db:/usr/src/app/db

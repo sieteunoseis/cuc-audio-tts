@@ -76,6 +76,16 @@ Note that the data directory will be used to store the audio files and the db di
 
 ![Connections](https://raw.githubusercontent.com/sieteunoseis/cuc-audio-tts/6660ec08598e901979a7355f3ade51cea61b3a2b/screenshots/connections.png)
 
+## Troubleshooting
+
+Docker can't resolve the hostname you're using for the backend service.
+
+Try pinging from frontend to backend container:
+
+```
+docker exec unity-tts-frontend ping unity-tts-backend
+```
+
 ## Giving Back
 
 If you would like to support my work and the time I put in creating the code, you can click the image below to get me a coffee. I would really appreciate it (but is not required).
