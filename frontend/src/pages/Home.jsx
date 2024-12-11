@@ -8,6 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { ElevenLabsClient } from "elevenlabs";
 import { customSelectStyles, selectClassNames } from "@/lib/select-styles";
+import { getConfig } from './config';
+const config = getConfig();
 
 const createOption = (label, value) => ({
   label,
@@ -62,7 +64,7 @@ const Home = () => {
     progress: 0,
   });
 
-  const apiBaseUrl = `http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/data`;
+  const apiBaseUrl = `http://localhost:${config.backendPort}/api/data`;
   const apiCupiUrl = `cupi?schema=handlers&objectId=callhandlers`;
 
   const simulateProgress = () => {
@@ -158,7 +160,7 @@ const Home = () => {
     const fetchVoices = async () => {
       try {
         const client = new ElevenLabsClient({
-          apiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
+          apiKey: config.elevenLabsApiKey,
         });
         const data = await client.voices.getAll();
         const voiceOptions = data.voices.map((voice) => ({
