@@ -7,3 +7,5 @@ backend/node_modules
 backend/db/database.db
 
 node_modules
+backend.env
+frontend.env
