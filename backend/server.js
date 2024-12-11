@@ -89,7 +89,7 @@ app.get("/api/data/cupi", async (req, res) => {
   // http://localhost:5001/api/data/cupi?schema=handlers&objectId=callhandlers
   const schema = req.query.schema;
   const objectId = req.query.objectId;
-  const response = await fetch('/api/data/selected');
+  const response = await fetch(`http://localhost:${PORT}/api/data/selected`);
   const data = await response.json();
   const hostname = data.hostname;
   const username = data.username;
