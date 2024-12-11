@@ -72,11 +72,9 @@ Note that the data directory will be used to store the audio files and the db di
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/1166872/137594073-4b3b3b3b-1b3b-4b3b-8b3b-4b3b3b3b3b3b.png)
+![Home](https://raw.githubusercontent.com/sieteunoseis/cuc-audio-tts/6660ec08598e901979a7355f3ade51cea61b3a2b/screenshots/home.png)
 
-![image](https://user-images.githubusercontent.com/1166872/137594073-4b3b3b3b-1b3b-4b3b-8b3b-4b3b3b3b3b3b.png)
-
-![image](https://user-images.githubusercontent.com/1166872/137594073-4b3b3b3b-1b3b-4b3b-8b3b-4b3b3b3b3b3b.png)
+![Connections](https://raw.githubusercontent.com/sieteunoseis/cuc-audio-tts/6660ec08598e901979a7355f3ade51cea61b3a2b/screenshots/connections.png)
 
 ## Giving Back
 
