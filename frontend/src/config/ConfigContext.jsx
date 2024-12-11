@@ -1,52 +1,58 @@
-// src/config/ConfigContext.jsx
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const ConfigContext = createContext(null);
 
 const getConfigValues = () => {
-  // Add debug logs
-  console.log("DEV mode:", import.meta.env.DEV);
-  console.log("Vite env vars:", import.meta.env);
-  console.log("Window config:", window.APP_CONFIG);
-  // If running in development (npm run dev)
+  // Development environment
   if (import.meta.env.DEV) {
     return {
-      backendPort: import.meta.env.VITE_BACKEND_PORT,
-      elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
-      brandingUrl: import.meta.env.VITE_BRANDING_URL,
-      brandingName: import.meta.env.VITE_BRANDING_NAME,
+      backendPort: import.meta.env.VITE_BACKEND_PORT || '3000',
+      elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY || '',
+      brandingUrl: import.meta.env.VITE_BRANDING_URL || '',
+      brandingName: import.meta.env.VITE_BRANDING_NAME || '',
     };
   }
 
-  // If running in production (Docker)
-  if (window.APP_CONFIG) {
-    return {
-      backendPort: window.APP_CONFIG.BACKEND_PORT,
-      elevenLabsApiKey: window.APP_CONFIG.ELEVENLABS_API_KEY,
-      brandingUrl: window.APP_CONFIG.BRANDING_URL,
-      brandingName: window.APP_CONFIG.BRANDING_NAME,
-    };
-  }
-
-  // Provide default values instead of throwing error
+  // Production environment
   return {
-    backendPort: "5001",
-    elevenLabsApiKey: "",
-    brandingUrl: "http://automate.builders",
-    brandingName: "Automate Builders",
+    backendPort: window.APP_CONFIG?.BACKEND_PORT || '3000',
+    elevenLabsApiKey: window.APP_CONFIG?.ELEVENLABS_API_KEY || '',
+    brandingUrl: window.APP_CONFIG?.BRANDING_URL || '',
+    brandingName: window.APP_CONFIG?.BRANDING_NAME || 'Default Brand',
   };
 };
 
 export function ConfigProvider({ children }) {
-  const config = getConfigValues();
+  const [config, setConfig] = useState(null);
 
-  return <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>;
+  useEffect(() => {
+    // Wait for config to be available
+    const checkConfig = () => {
+      if (import.meta.env.DEV || window.APP_CONFIG) {
+        setConfig(getConfigValues());
+      } else {
+        setTimeout(checkConfig, 100);
+      }
+    };
+
+    checkConfig();
+  }, []);
+
+  if (!config) {
+    return <div>Loading configuration...</div>; // Or your loading component
+  }
+
+  return (
+    <ConfigContext.Provider value={config}>
+      {children}
+    </ConfigContext.Provider>
+  );
 }
 
 export function useConfig() {
   const context = useContext(ConfigContext);
   if (!context) {
-    throw new Error("useConfig must be used within a ConfigProvider");
+    throw new Error('useConfig must be used within a ConfigProvider');
   }
   return context;
 }
