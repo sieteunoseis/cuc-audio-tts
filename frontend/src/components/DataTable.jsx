@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useConfig } from '../config/ConfigContext';
 
 const DataTable = ({ data, onDataChange }) => {
+  const config = useConfig();
   const [jsonData, setData] = useState([]);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ const DataTable = ({ data, onDataChange }) => {
 
 
   const handleDelete = async (id) => {
-    const response = await fetch(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/data/${id}`, {
+    const response = await fetch(`http://localhost:${config.backendPort}/api/data/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -27,7 +29,7 @@ const DataTable = ({ data, onDataChange }) => {
   };
 
   const selectRecord = async (id) => {
-    const response = await fetch(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/data/select/${id}`, {
+    const response = await fetch(`http://localhost:${config.backendPort}/api/data/select/${id}`, {
       method: "PUT",
     });
     if (response.ok) {
@@ -87,7 +89,7 @@ const DataTable = ({ data, onDataChange }) => {
           ))
         ) : (
           <tr>
-            <td colSpan={import.meta.env.VITE_TABLE_COLUMNS.split(",").length + 2} className="border text-center p-2">
+            <td colSpan={config.tableColumns.split(",").length + 2} className="border text-center p-2">
               No records found
             </td>
           </tr>

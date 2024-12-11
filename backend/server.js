@@ -10,7 +10,7 @@ const converter = new AudioConverter();
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.VITE_BACKEND_PORT || 5001;
 const language = process.env.LANGUAGE || "1033";
 
 // Enable CORS
@@ -25,7 +25,7 @@ const db = new sqlite3.Database("./db/database.db", (err) => {
   console.log("Connected to the SQLite database.");
 });
 
-const tableColumns = process.env.TABLE_COLUMNS.split(",").map((col) => col.trim());
+const tableColumns = process.env.VITE_TABLE_COLUMNS.split(",").map((col) => col.trim());
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS connections (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -145,7 +145,7 @@ app.post("/api/data/update-callhandler", async (req, res) => {
   const data = req.body;
   const service = new cupiService(data.connectionData.hostname, data.connectionData.username, data.connectionData.password, false);
   const objectId = data.callHandler.objectId;
-  let callHandlerUri = `/vmrest/handlers/callhandlers/${objectId}`
+  let callHandlerUri = `/vmrest/handlers/callhandlers/${objectId}`;
 
   // If no objectId is provided, create a new call handler
   if (!objectId) {
@@ -154,13 +154,13 @@ app.post("/api/data/update-callhandler", async (req, res) => {
       var templateObj;
       if (Array.isArray(callhandlertemplates)) {
         templateObj = callhandlertemplates.CallhandlerTemplate.find((template) => template.DisplayName === "System Call Handler Template");
-      }else{
+      } else {
         templateObj = callhandlertemplates.CallhandlerTemplate;
       }
-      callHandlerUri = await service.cupiRequest(`/vmrest/handlers/callhandlers?templateObjectId=${templateObj.ObjectId}`, "POST", "application/json",JSON.stringify({ 'DisplayName': data.callHandler.displayName }));
+      callHandlerUri = await service.cupiRequest(`/vmrest/handlers/callhandlers?templateObjectId=${templateObj.ObjectId}`, "POST", "application/json", JSON.stringify({ DisplayName: data.callHandler.displayName }));
     } catch (error) {
       res.status(500).json({ error: "Call Handler not found" });
-      return; 
+      return;
     }
   }
 
