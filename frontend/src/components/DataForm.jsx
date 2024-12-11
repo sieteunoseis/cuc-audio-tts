@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import validator from "validator";
+import { useConfig } from '../config/ConfigContext';
 
 const DataForm = ({ onDataAdded }) => {
+  const config = useConfig();
   const [data, setData] = useState([]);
   const [errors, setErrors] = useState({});
   const object = data.reduce((obj, value) => {
@@ -45,7 +47,7 @@ const DataForm = ({ onDataAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}/api/data`, {
+    const response = await fetch(`http://localhost:${config.backendPort}/api/data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

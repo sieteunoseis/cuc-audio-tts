@@ -6,19 +6,21 @@ const getConfigValues = () => {
   // Development environment
   if (import.meta.env.DEV) {
     return {
-      backendPort: import.meta.env.VITE_BACKEND_PORT || '3000',
+      backendPort: import.meta.env.VITE_BACKEND_PORT || '5001',
       elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY || '',
       brandingUrl: import.meta.env.VITE_BRANDING_URL || '',
       brandingName: import.meta.env.VITE_BRANDING_NAME || '',
+      tableColumns: import.meta.env.VITE_TABLE_COLUMNS || '',
     };
   }
 
   // Production environment
   return {
-    backendPort: window.APP_CONFIG?.BACKEND_PORT || '3000',
+    backendPort: window.APP_CONFIG?.BACKEND_PORT || '5001',
     elevenLabsApiKey: window.APP_CONFIG?.ELEVENLABS_API_KEY || '',
     brandingUrl: window.APP_CONFIG?.BRANDING_URL || '',
-    brandingName: window.APP_CONFIG?.BRANDING_NAME || 'Default Brand',
+    brandingName: window.APP_CONFIG?.BRANDING_NAME || 'Automate Builders',
+    tableColumns: window.APP_CONFIG?.TABLE_COLUMNS || '',
   };
 };
 

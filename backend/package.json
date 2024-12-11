@@ -3,6 +3,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "nodemon --env-file ../.env.local server.js",
     "nodemon": "nodemon server.js"
   },
   "dependencies": {

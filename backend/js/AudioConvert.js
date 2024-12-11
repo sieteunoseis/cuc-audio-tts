@@ -5,7 +5,7 @@ const ffmpeg = require('fluent-ffmpeg');
 
 class AudioConverter {
   constructor() {
-    const apiKey = process.env.ELEVENLABS_API_KEY;
+    const apiKey = process.env.VITE_ELEVENLABS_API_KEY;
     if (!apiKey) {
       throw new Error('ELEVENLABS_API_KEY is not set in environment variables');
     }
