@@ -6,6 +6,8 @@ const dotenv = require("dotenv");
 const cupiService = require("cisco-cupi");
 const AudioConverter = require("./js/AudioConvert.js");
 const converter = new AudioConverter();
+const fs = require('fs');
+const path = require('path');
 
 dotenv.config();
 
@@ -17,6 +19,11 @@ const LANGUAGE = process.env.LANGUAGE || "1033";
 // Enable CORS
 app.use(cors());
 app.use(express.json());
+
+const dbDir = './db';
+if (!fs.existsSync(dbDir)){
+    fs.mkdirSync(dbDir, { recursive: true });
+}
 
 // Connect to SQLite database
 const db = new sqlite3.Database("./db/database.db", (err) => {
