@@ -6,7 +6,8 @@ export default defineConfig(({ mode }) => {
 
     // Load env file from parent directory
     const env = loadEnv(mode, path.join(process.cwd(), '..'), '')
-  
+    console.log('Loaded environment:', Object.keys(env)) // Using env to avoid the error
+
     return {
       plugins: [react()],
       envDir: '..',
