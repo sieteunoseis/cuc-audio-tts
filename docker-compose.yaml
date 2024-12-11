@@ -8,6 +8,9 @@ services:
 
   unity-tts-backend:
     image: ghcr.io/sieteunoseis/unity-tts-backend:master
+    # volumes:
+    #   - ./data:/usr/src/app/data
+    #   - ./db:/usr/src/app/db
     ports:
       - "5001:5001" # Map port 5001 on host to port 5001 in container
     env_file:
