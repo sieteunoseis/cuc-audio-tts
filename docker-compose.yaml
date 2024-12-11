@@ -6,6 +6,9 @@ services:
       - "3000:80" # Map port 3000 on host to port 80 in container
     environment:
       - VITE_BACKEND_PORT=5001
+      - VITE_ELEVENLABS_API_KEY=sk_73e46968b6ab277469d48189ab38bc6d8fa9230487b162c1
+      - VITE_BRANDING_URL=http://www.ohsu.edu
+      - VITE_BRANDING_NAME=OHSU
 
   backend:
     build:
@@ -14,3 +17,4 @@ services:
       - "5001:5001" # Map port 5001 on host to port 5001 in container
     environment:
       - TABLE_COLUMNS=name,hostname,username,password,version # Environment variable for the table columns. Update as needed for your project.
+      - ELEVENLABS_API_KEY=sk_73e46968b6ab277469d48189ab38bc6d8fa9230487b162c1
