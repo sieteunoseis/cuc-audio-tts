@@ -16,5 +16,7 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 5001
 
+RUN mkdir /db
+
 # Command to run the application
 CMD [ "node", "server.js" ]
