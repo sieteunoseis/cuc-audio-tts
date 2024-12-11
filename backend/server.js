@@ -10,8 +10,9 @@ const converter = new AudioConverter();
 dotenv.config();
 
 const app = express();
-const PORT = process.env.VITE_BACKEND_PORT || 5001;
-const language = process.env.LANGUAGE || "1033";
+const PORT = process.env.PORT || 5001;
+const TABLE_COLUMNS = process.env.VITE_TABLE_COLUMNS || "name, hostname, username, password";
+const LANGUAGE = process.env.LANGUAGE || "1033";
 
 // Enable CORS
 app.use(cors());
@@ -25,7 +26,7 @@ const db = new sqlite3.Database("./db/database.db", (err) => {
   console.log("Connected to the SQLite database.");
 });
 
-const tableColumns = process.env.VITE_TABLE_COLUMNS.split(",").map((col) => col.trim());
+const tableColumns = TABLE_COLUMNS.split(",").map((col) => col.trim());
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS connections (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,7 +82,7 @@ app.get("/api/data/cupi", async (req, res) => {
   // http://localhost:5001/api/data/cupi?schema=handlers&objectId=callhandlers
   const schema = req.query.schema;
   const objectId = req.query.objectId;
-  const response = await fetch(`http://localhost:${PORT}/api/data/selected`);
+  const response = await fetch('/api/data/selected');
   const data = await response.json();
   const hostname = data.hostname;
   const username = data.username;
@@ -168,7 +169,7 @@ app.post("/api/data/update-callhandler", async (req, res) => {
   const { buffer, filepath } = await converter.generateAndConvertAudio(data.text, data.voice.id, `output-${Date.now()}`);
 
   try {
-    var results = await service.cupiRequest(`${callHandlerUri}/greetings/${data.greetingType}/greetingstreamfiles/${language}/audio`, "PUT", "audio/wav", buffer);
+    var results = await service.cupiRequest(`${callHandlerUri}/greetings/${data.greetingType}/greetingstreamfiles/${LANGUAGE}/audio`, "PUT", "audio/wav", buffer);
     if (results && data.isEnabled) {
       await service.cupiRequest(`${callHandlerUri}/greetings/${data.greetingType}/`, "PUT", "application/json", JSON.stringify({ Enabled: "true", TimeExpires: "" }));
     }
@@ -178,6 +179,6 @@ app.post("/api/data/update-callhandler", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
