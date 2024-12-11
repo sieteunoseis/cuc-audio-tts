@@ -10,4 +10,3 @@ node_modules
 backend.env
 frontend.env
 .env.local
-.env.local
