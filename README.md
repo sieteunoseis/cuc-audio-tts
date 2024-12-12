@@ -59,8 +59,12 @@ http://localhost:3000
 
 #### 5. Optionally add local volume to persist data
 ```
-mkdir /data
-mkdir /db
+# Create directories if they don't exist
+mkdir -p ./data ./db
+
+# Set permissions (replace 1000:1000 with your actual UID:GID if different)
+chown -R 1000:1000 ./data ./db
+chmod 755 ./data ./db
 ```
 Add the following line to the docker-compose.yml file for the backend service.
 ``` 

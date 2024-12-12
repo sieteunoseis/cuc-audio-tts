@@ -96,7 +96,7 @@ app.get("/api/data/cupi", async (req, res) => {
   const password = data.password;
 
   let service = new cupiService(hostname, username, password, false);
-  var results = await service.cupiRequest(`/vmrest/${schema}/${objectId}`, "GET", "application/json", null);
+  var results = await service.cupiRequest(`/vmrest/${schema}/${objectId}?query=(IsPrimary%20is%200)`, "GET", "application/json", null);
   res.json(results);
 });
 
