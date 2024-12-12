@@ -151,6 +151,7 @@ app.put("/api/data/select/:id", (req, res) => {
 
 app.post("/api/data/update-callhandler", async (req, res) => {
   const data = req.body;
+  const greetingType = data.greetingType;
   const service = new cupiService(data.connectionData.hostname, data.connectionData.username, data.connectionData.password, false);
   const objectId = data.callHandler.objectId;
   let callHandlerUri = `/vmrest/handlers/callhandlers/${objectId}`;
@@ -176,9 +177,9 @@ app.post("/api/data/update-callhandler", async (req, res) => {
   const { buffer, filepath } = await converter.generateAndConvertAudio(data.text, data.voice.id, `output-${Date.now()}`);
 
   try {
-    var results = await service.cupiRequest(`${callHandlerUri}/greetings/${data.greetingType}/greetingstreamfiles/${LANGUAGE}/audio`, "PUT", "audio/wav", buffer);
+    var results = await service.cupiRequest(`${callHandlerUri}/greetings/${greetingType}/greetingstreamfiles/${LANGUAGE}/audio`, "PUT", "audio/wav", buffer);
     if (results && data.isEnabled) {
-      await service.cupiRequest(`${callHandlerUri}/greetings/${data.greetingType}/`, "PUT", "application/json", JSON.stringify({ Enabled: "true", TimeExpires: "" }));
+      await service.cupiRequest(`${callHandlerUri}/greetings/${greetingType}/`, "PUT", "application/json", JSON.stringify({ Enabled: "true", TimeExpires: (data.endDateTime ? data.endDateTime : "") }));
     }
     res.status(200).send(); // No Content
   } catch (error) {

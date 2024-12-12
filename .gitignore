@@ -10,3 +10,4 @@ node_modules
 backend.env
 frontend.env
 .env.local
+backend/data/*.wav

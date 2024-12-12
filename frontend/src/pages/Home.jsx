@@ -6,9 +6,16 @@ import Select from "react-select";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { ElevenLabsClient } from "elevenlabs";
-import { customSelectStyles, selectClassNames } from "@/lib/select-styles";
-import { useConfig } from '../config/ConfigContext';
+import { customSelectStyles, selectClassNames, inputGroupSelectStyles } from "@/lib/select-styles";
+import { useConfig } from "../config/ConfigContext";
+import TimePicker from "@/components/ui/time-picker";
 
 const createOption = (label, value) => ({
   label,
@@ -18,7 +25,7 @@ const createOption = (label, value) => ({
 const greetingOptions = [
   { label: "Alternate", value: "Alternate" },
   { label: "Busy", value: "Busy" },
-  { label: "Closed", value: "Closed" },
+  { label: "Closed", value: "Off Hours" },
   { label: "Error", value: "Error" },
   { label: "Holiday", value: "Holiday" },
   { label: "Internal", value: "Internal" },
@@ -26,6 +33,11 @@ const greetingOptions = [
 ];
 
 const enableOptions = [
+  { label: "Yes", value: true },
+  { label: "No", value: false },
+];
+
+const enableEndDateOptions = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];
@@ -55,7 +67,10 @@ const Home = () => {
     selectedVoice: null,
     ttsText: "",
     voices: [],
-    isEnabled: null,
+    isEnabled: { label: "No", value: false },
+    enableEndDate: { label: "No", value: false },
+    endDate: new Date(),
+    endTime: "13:00",
   });
 
   // Submit progress state
@@ -101,13 +116,22 @@ const Home = () => {
   };
 
   const handleSubmit = async () => {
-    // Find the selected connection
     const selectedConnection = connectionState.connections.find((conn) => conn.selected === "YES");
 
     if (!selectedConnection || !callHandlerOptions.selected || !formState.greetingType || !formState.selectedVoice || !formState.ttsText || formState.isEnabled === null) {
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields or no connection selected",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Additional validation for end date/time if enabled
+    if (formState.enableEndDate.value && (!formState.endDate || !formState.endTime)) {
+      toast({
+        title: "Missing fields",
+        description: "Please select both end date and time",
         variant: "destructive",
       });
       return;
@@ -122,12 +146,13 @@ const Home = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          connectionData: selectedConnection, // Pass the entire connection object
+          connectionData: selectedConnection,
           callHandler: callHandlerOptions.selected.value,
           greetingType: formState.greetingType.value,
           voice: { name: formState.selectedVoice.label, id: formState.selectedVoice.value },
           text: formState.ttsText,
-          isEnabled: formState.isEnabled.value, // Add the enable option to the request
+          isEnabled: formState.isEnabled.value,
+          endDateTime: formState.enableEndDate.value ? formatDateTime(formState.endDate, formState.endTime) : "",
         }),
       });
 
@@ -142,6 +167,9 @@ const Home = () => {
         title: "Success",
         description: "Call handler updated successfully",
       });
+
+      // Reset the form after successful submission
+      resetForm();
     } catch (error) {
       console.error("Error updating call handler:", error);
       clearInterval(progressInterval);
@@ -153,6 +181,30 @@ const Home = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const resetForm = () => {
+    setCallHandlerOptions((prev) => ({
+      ...prev,
+      selected: null,
+    }));
+    setFormState((prev) => ({
+      ...prev,
+      greetingType: null,
+      selectedVoice: null,
+      ttsText: "",
+      isEnabled: { label: "No", value: false },
+      enableEndDate: { label: "No", value: false },
+      endDate: new Date(),
+      endTime: "13:00",
+    }));
+  };
+
+  const formatDateTime = (date, time) => {
+    const [hours, minutes] = time.split(":");
+    const newDate = new Date(date);
+    newDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    return format(newDate, "yyyy-MM-dd HH:mm:ss.0");
   };
 
   // Fetch voices from ElevenLabs
@@ -219,7 +271,7 @@ const Home = () => {
         const response = await fetch(`${apiBaseUrl}/${apiCupiUrl}`);
         const data = await response.json();
 
-        const newOptions = data.Callhandler.map((handler) => createOption(handler.DisplayName, handler.ObjectId));
+        const newOptions = data.Callhandler.sort((a, b) => a.DisplayName.localeCompare(b.DisplayName)).map((handler) => createOption(handler.DisplayName, handler.ObjectId));
 
         setCallHandlerOptions((prev) => ({
           ...prev,
@@ -265,7 +317,47 @@ const Home = () => {
         {formState.selectedVoice && (
           <>
             <Textarea className="mt-5" placeholder="Enter greeting text..." value={formState.ttsText} onChange={(e) => setFormState((prev) => ({ ...prev, ttsText: e.target.value }))} disabled={submitProgress.isSubmitting} rows={5} />
-            <Select className="mt-5" placeholder="Enable Greeting..." value={formState.isEnabled} onChange={(selected) => setFormState((prev) => ({ ...prev, isEnabled: selected }))} options={enableOptions} isDisabled={submitProgress.isSubmitting} styles={customSelectStyles} classNames={selectClassNames} />
+
+            <div className="flex flex-col space-y-4">
+              {/* Is Enabled Select */}
+              <div className="flex">
+                <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-muted text-muted-foreground border-input">Is Enabled</span>
+                <Select placeholder="Select option..." value={formState.isEnabled} onChange={(selected) => setFormState((prev) => ({ ...prev, isEnabled: selected }))} options={enableOptions} isDisabled={submitProgress.isSubmitting} styles={inputGroupSelectStyles} classNames={selectClassNames} />
+              </div>
+
+              {/* Enable End Date Select */}
+              {formState.isEnabled?.value && (
+                <div className="flex">
+                  <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-muted text-muted-foreground border-input">Enable End Date</span>
+                  <Select placeholder="Select option..." value={formState.enableEndDate} onChange={(selected) => setFormState((prev) => ({ ...prev, enableEndDate: selected }))} options={enableEndDateOptions} isDisabled={submitProgress.isSubmitting} styles={inputGroupSelectStyles} classNames={selectClassNames} />
+                </div>
+              )}
+            </div>
+
+            {formState.enableEndDate?.value && (
+              <div className="flex flex-col space-y-4">
+                <p className="text-sm font-medium">End Date/Time</p>
+                <div className="flex flex-row space-x-4">
+                  <div className="flex-1">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !formState.endDate && "text-muted-foreground")}>
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formState.endDate ? format(formState.endDate, "PPP") : "Pick an end date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar mode="single" selected={formState.endDate} onSelect={(endDate) => setFormState((prev) => ({ ...prev, endDate }))} initialFocus />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex-1">
+                    {/* <Input type="time" value={formState.endTime} onChange={(e) => setFormState((prev) => ({ ...prev, endTime: e.target.value }))} className="w-full" /> */}
+                    <TimePicker value={formState.endTime} onChange={(time) => setFormState((prev) => ({ ...prev, endTime: time }))} />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {submitProgress.isSubmitting && (
               <div className="mt-4 space-y-2">
