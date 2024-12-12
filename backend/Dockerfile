@@ -10,25 +10,19 @@ RUN apk add --no-cache ffmpeg
 # Create app directory and set ownership
 WORKDIR /usr/src/app
 
-# Create db directory and set permissions explicitly
-RUN mkdir -p /usr/src/app/db && \
-    mkdir -p /usr/src/app/data && \
-    chmod 755 /usr/src/app/db && \
-    chmod 755 /usr/src/app/data
+# Create directories as root and set ownership immediately
+RUN mkdir -p /usr/src/app/db /usr/src/app/data && \
+    chown -R appuser:appgroup /usr/src/app && \
+    chmod 755 /usr/src/app/db /usr/src/app/data
 
 # Copy package files
-COPY package*.json ./
+COPY --chown=appuser:appgroup package*.json ./
 
 # Install production dependencies only
 RUN npm ci --only=production
 
-# Copy application code
-COPY . .
-
-# Set correct permissions for all directories and files
-RUN chown -R appuser:appgroup /usr/src/app && \
-    chmod -R 755 /usr/src/app/db && \
-    chmod -R 755 /usr/src/app/data
+# Copy application code with correct ownership
+COPY --chown=appuser:appgroup . .
 
 # Switch to non-root user
 USER appuser
