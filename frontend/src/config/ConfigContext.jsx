@@ -3,13 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ConfigContext = createContext(null);
 
 const getConfigValues = () => {
-  console.log('Environment:', import.meta.env.MODE);
-  console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
-  console.log('window.APP_CONFIG:', window.APP_CONFIG);
   // Development environment
   if (import.meta.env.DEV) {
     const config = {
-      backendUrl: import.meta.env.VITE_BACKEND_URL || "http://backend:5001",
       elevenLabsApiKey: import.meta.env.VITE_ELEVENLABS_API_KEY || "",
       brandingUrl: import.meta.env.VITE_BRANDING_URL || "https://automate.builders",
       brandingName: import.meta.env.VITE_BRANDING_NAME || "Automate Builders",
@@ -21,7 +17,6 @@ const getConfigValues = () => {
 
   // Production environment
   const config = {
-    backendUrl: window.APP_CONFIG?.BACKEND_URL || "http://backend:5001",
     elevenLabsApiKey: window.APP_CONFIG?.ELEVENLABS_API_KEY || "",
     brandingUrl: window.APP_CONFIG?.BRANDING_URL || "https://automate.builders",
     brandingName: window.APP_CONFIG?.BRANDING_NAME || "Automate Builders",

@@ -64,7 +64,7 @@ const Home = () => {
     progress: 0,
   });
 
-  const apiBaseUrl = `${config.backendUrl}/api/data`;
+  const apiBaseUrl = `/api/data`;
   const apiCupiUrl = `cupi?schema=handlers&objectId=callhandlers`;
 
   const simulateProgress = () => {
