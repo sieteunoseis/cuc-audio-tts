@@ -94,3 +94,29 @@ export const selectClassNames = {
   input: () => "text-sm",
   option: () => "text-sm"
 };
+
+export const inputGroupSelectStyles = {
+  ...customSelectStyles,
+  control: (baseStyles, state) => ({
+    ...baseStyles,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    backgroundColor: 'hsl(var(--background))',
+    borderColor: 'hsl(var(--input))',
+    minHeight: '40px',
+    fontSize: '0.875rem',
+    lineHeight: '1.25rem',
+    fontFamily: 'var(--font-sans)',
+    boxShadow: state.isFocused ? 'none' : baseStyles.boxShadow,
+    borderWidth: '1px',
+    padding: '2px',
+    '&:hover': {
+      borderColor: 'hsl(var(--input))',
+    },
+    '&:focus-within': {
+      borderColor: 'hsl(var(--ring))',
+      boxShadow: 'rgb(0 0 0 / 0) 0px 0px 0px 0px, rgb(0 0 0 / 0) 0px 0px 0px 0px, hsl(var(--ring)) 0px 0px 0px 1.5px',
+      outline: 'none'
+    }
+  })
+};
