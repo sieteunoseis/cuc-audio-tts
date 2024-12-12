@@ -11,7 +11,6 @@ const getConfigValues = () => {
       brandingName: import.meta.env.VITE_BRANDING_NAME || "Automate Builders",
       tableColumns: import.meta.env.VITE_TABLE_COLUMNS || "name,hostname,username,password",
     };
-    console.log('Dev config:', config);
     return config;
   }
 
@@ -22,7 +21,6 @@ const getConfigValues = () => {
     brandingName: window.APP_CONFIG?.BRANDING_NAME || "Automate Builders",
     tableColumns: window.APP_CONFIG?.TABLE_COLUMNS || "name,hostname,username,password",
   };
-  console.log('Prod config:', config);
   return config;
 };
 

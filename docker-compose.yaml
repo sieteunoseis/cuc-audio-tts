@@ -16,7 +16,8 @@ services:
       - ./data:/usr/src/app/data
       - ./db:/usr/src/app/db
     expose:
-      - "5001"
+      - "5000"
+    user: "${UID:-1000}:${GID:-1000}"  # Use host user's UID/GID
     networks:
       - unity-network
     env_file:
