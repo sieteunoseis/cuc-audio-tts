@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DataForm from "../components/DataForm";
 import DataTable from "../components/DataTable";
-import { useConfig } from '../config/ConfigContext';
 
 function App() {
-  const config = useConfig();
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const response = await fetch(`${config.backendUrl}/api/data`);
+    const response = await fetch(`/api/data`);
     const result = await response.json();
     setData(result);
   };

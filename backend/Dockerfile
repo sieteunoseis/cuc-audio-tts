@@ -34,7 +34,7 @@ RUN chown -R appuser:appgroup /usr/src/app && \
 USER appuser
 
 # Expose port
-EXPOSE 5001
+EXPOSE 5000
 
 # Command to run the application
 CMD [ "node", "server.js" ]
