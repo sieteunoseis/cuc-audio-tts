@@ -40,13 +40,13 @@ touch .env
 ```
 
 | Variable Name | Explanation | Example/Default | Required |
-|--------------|-------------|----------------|----------------|
-| VITE_BACKEND_PORT | Port number for the backend server in Vite applications | `5001` | `no` |                
+|--------------|-------------|----------------|----------------|           
 | VITE_ELEVENLABS_API_KEY | Authentication key for ElevenLabs API integration. See https://elevenlabs.io/app/settings/api-keys | `sk_73e46...62c1` | `yes` | 
 | VITE_BRANDING_NAME | Organization name for branding purposes in NavBar | `Automate Builders` | `no` | 
-| VITE_BRANDING_URL | URL for organization branding/website in NavBar | `http://automate.builders` | `no` | 
-| VITE_TABLE_COLUMNS | Comma-separated list of column names for table display | `name,hostname,username,password` | `no` | 
-| LANGUAGE | Cisco Unity Locale to save the greeting to | `1033` | `no` | 
+| VITE_BRANDING_URL | URL for organization branding/website in NavBar | `http://automate.builders` | `no` |
+| LANGUAGE | Cisco Unity Locale to save the greeting to | `1033` | `no` |
+| UID | User ID | `1000` | `no` |
+| GID | Group ID | `1000` | `no` |
 
 #### 3. Run the app
 ```
@@ -68,11 +68,12 @@ chmod 755 ./data ./db
 ```
 Add the following line to the docker-compose.yml file for the backend service.
 ``` 
+user: "${UID:-1000}:${GID:-1000}"
 volumes:
   - ./data:/usr/src/app/data
   - ./db:/usr/src/app/db
 ```
-Note that the data directory will be used to store the audio files and the db directory will be used to store the sqlite database.
+Note: that the data directory will be used to store the audio files and the db directory will be used to store the sqlite database.
 
 ## Screenshots
 
@@ -82,12 +83,24 @@ Note that the data directory will be used to store the audio files and the db di
 
 ## Troubleshooting
 
-Docker can't resolve the hostname you're using for the backend service.
+Frontend container is not able to reach backend container.
 
 Try pinging from frontend to backend container:
 
 ```
 docker exec unity-tts-frontend ping unity-tts-backend
+```
+
+Backend container is not able to save the audio files or database.
+
+```
+docker exec unity-tts-backend ls -l /usr/src/app/data
+```
+
+Try to create a file in the data directory and check the permissions.
+
+```
+docker exec unity-tts-backend touch /usr/src/app/data/test.txt
 ```
 
 ## Giving Back
