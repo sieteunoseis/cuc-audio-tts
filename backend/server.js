@@ -7,7 +7,6 @@ const cupiService = require("cisco-cupi");
 const AudioConverter = require("./js/AudioConvert.js");
 const converter = new AudioConverter();
 const fs = require('fs');
-const path = require('path');
 
 dotenv.config();
 

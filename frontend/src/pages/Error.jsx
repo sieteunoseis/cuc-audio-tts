@@ -1,21 +1,40 @@
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Home } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
+  const handleGoHome = () => {
+    navigate('/')
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800">
-      <h1 className="text-4xl font-bold text-red-500">Something Went Wrong</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        We encountered an error while processing your request. Please try again later.
-      </p>
-      <button
-        onClick={() => navigate('/')}
-        className="mt-6 px-6 py-3 bg-blue-500 text-white text-lg font-medium rounded-lg hover:bg-blue-600 transition"
-      >
-        Go Back Home
-      </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6 text-center">
+          <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-destructive/10">
+            <span className="text-2xl">⚠️</span>
+          </div>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight">
+            Something went wrong
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We encountered an error while processing your request. 
+            Please try again later.
+          </p>
+        </CardContent>
+        <CardFooter className="flex justify-center pb-6">
+          <Button 
+            onClick={handleGoHome}
+            className="flex items-center gap-2"
+          >
+            <Home className="w-4 h-4" />
+            Go back home
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
