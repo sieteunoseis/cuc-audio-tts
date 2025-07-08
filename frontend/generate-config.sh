@@ -2,6 +2,13 @@
 
 # Debug: Print environment variables (safely)
 echo "Debug: VITE_BACKEND_URL = ${VITE_BACKEND_URL:-not set}"
+echo "Debug: PORT = ${PORT:-not set}"
+
+# Generate nginx.conf from template with PORT substitution
+BACKEND_PORT=${PORT:-3000}
+envsubst '${BACKEND_PORT}' < /nginx.conf.template > /etc/nginx/conf.d/default.conf
+
+echo "Generated nginx config with backend port: $BACKEND_PORT"
 
 # Create the runtime config file
 cat <<EOF > /usr/share/nginx/html/config.js
