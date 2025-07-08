@@ -4,6 +4,11 @@ export default {
     try {
       const url = new URL(request.url);
       
+      // Handle config.js request
+      if (url.pathname === '/config.js') {
+        return generateConfigJs(env);
+      }
+      
       // Handle API requests - proxy to your tunnel
       if (url.pathname.startsWith('/api/')) {
         return handleApiRequest(request, env);
@@ -29,6 +34,25 @@ export default {
     }
   },
 };
+
+function generateConfigJs(env) {
+  const config = {
+    BACKEND_URL: "/api", // Relative URL since Worker handles proxying
+    ELEVENLABS_API_KEY: env.VITE_ELEVENLABS_API_KEY || "",
+    BRANDING_URL: env.VITE_BRANDING_URL || "https://automate.builders",
+    BRANDING_NAME: env.VITE_BRANDING_NAME || "Automate Builders",
+    TABLE_COLUMNS: env.VITE_TABLE_COLUMNS || "name,hostname,username,password",
+  };
+
+  const configJs = `window.APP_CONFIG = ${JSON.stringify(config, null, 2)};`;
+  
+  return new Response(configJs, {
+    headers: {
+      'Content-Type': 'application/javascript',
+      'Cache-Control': 'no-cache'
+    }
+  });
+}
 
 async function handleApiRequest(request, env) {
   try {
