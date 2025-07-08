@@ -74,8 +74,9 @@ async function handleApiRequest(request, env) {
     console.log('Backend URL:', backendUrl);
     console.log('Request path:', url.pathname);
   
-  // Construct the target URL
-  const targetUrl = new URL(url.pathname + url.search, backendUrl);
+    // Construct the target URL
+    const targetUrl = new URL(url.pathname + url.search, backendUrl);
+    console.log('Target URL:', targetUrl.toString());
   
   // Create headers for private network request
   const headers = new Headers(request.headers);
@@ -94,7 +95,10 @@ async function handleApiRequest(request, env) {
   
   try {
     // Forward the request to your tunnel
+    console.log('Sending request to backend...');
     const response = await fetch(proxyRequest);
+    console.log('Backend response status:', response.status);
+    console.log('Backend response headers:', Object.fromEntries(response.headers));
     
     // Create a new response with CORS headers
     const proxyResponse = new Response(response.body, {
