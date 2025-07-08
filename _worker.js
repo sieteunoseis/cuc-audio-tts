@@ -81,6 +81,12 @@ async function handleApiRequest(request, env) {
   // Create headers for private network request
   const headers = new Headers(request.headers);
   
+  // Add Cloudflare Access service token headers for authentication
+  if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
+    headers.set('CF-Access-Client-Id', env.CF_ACCESS_CLIENT_ID);
+    headers.set('CF-Access-Client-Secret', env.CF_ACCESS_CLIENT_SECRET);
+  }
+  
   // Optional: Add custom secret header for additional security
   if (env.BACKEND_SECRET_KEY) {
     headers.set('X-Worker-Secret', env.BACKEND_SECRET_KEY);
