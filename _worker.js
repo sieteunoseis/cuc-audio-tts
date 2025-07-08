@@ -1,32 +1,49 @@
 // Cloudflare Worker script to handle API proxying to backend tunnel
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    
-    // Handle API requests - proxy to your tunnel
-    if (url.pathname.startsWith('/api/')) {
-      return handleApiRequest(request, env);
+    try {
+      const url = new URL(request.url);
+      
+      // Handle API requests - proxy to your tunnel
+      if (url.pathname.startsWith('/api/')) {
+        return handleApiRequest(request, env);
+      }
+      
+      // Handle static assets
+      return env.ASSETS.fetch(request);
+    } catch (error) {
+      console.error('Worker error:', error);
+      return new Response(JSON.stringify({ 
+        error: 'Worker exception',
+        message: error.message,
+        stack: error.stack 
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
-    
-    // Handle static assets
-    return env.ASSETS.fetch(request);
   },
 };
 
 async function handleApiRequest(request, env) {
-  const url = new URL(request.url);
-  
-  // Get the backend tunnel URL from environment variable
-  const backendUrl = env.BACKEND_TUNNEL_URL;
-  
-  if (!backendUrl) {
-    return new Response(JSON.stringify({ 
-      error: 'Backend tunnel URL not configured' 
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
+  try {
+    const url = new URL(request.url);
+    
+    // Get the backend tunnel URL from environment variable
+    const backendUrl = env.BACKEND_TUNNEL_URL;
+    
+    if (!backendUrl) {
+      return new Response(JSON.stringify({ 
+        error: 'Backend tunnel URL not configured',
+        debug: 'BACKEND_TUNNEL_URL environment variable is missing'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    console.log('Backend URL:', backendUrl);
+    console.log('Request path:', url.pathname);
   
   // Construct the target URL
   const targetUrl = new URL(url.pathname + url.search, backendUrl);
@@ -71,6 +88,21 @@ async function handleApiRequest(request, env) {
       details: error.message 
     }), {
       status: 502,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      }
+    });
+  }
+  
+  } catch (error) {
+    console.error('API request error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'API request exception',
+      message: error.message,
+      stack: error.stack
+    }), {
+      status: 500,
       headers: { 
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
