@@ -10,16 +10,18 @@ import { Toaster } from "@/components/ui/toaster";
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <Router>
-        <Toaster />
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/connections" element={<Connections />} />
-          <Route path="/error" element={<ErrorPage />} />
-        </Routes>
-      </Router>
-      <ModeToggle />
+      <div className="min-h-screen bg-gray-100 dark:bg-black">
+        <Router>
+          <Toaster />
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/connections" element={<Connections />} />
+            <Route path="/error" element={<ErrorPage />} />
+          </Routes>
+        </Router>
+        <ModeToggle />
+      </div>
     </ThemeProvider>
   );
 }

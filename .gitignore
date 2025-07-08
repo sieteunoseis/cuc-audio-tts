@@ -1,6 +1,7 @@
 .DS_Store
 frontend/.env
 frontend/node_modules
+frontend/dist
 
 backend/.env
 backend/node_modules
@@ -9,5 +10,8 @@ backend/db/database.db
 node_modules
 backend.env
 frontend.env
+.env
 .env.local
 backend/data/*.wav
+
+/net-commander

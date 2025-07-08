@@ -11,7 +11,7 @@ const fs = require('fs');
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const TABLE_COLUMNS = process.env.VITE_TABLE_COLUMNS || "name, hostname, username, password";
 const LANGUAGE = process.env.LANGUAGE || "1033";
 

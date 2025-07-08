@@ -46,11 +46,12 @@ const DataTable = ({ data, onDataChange }) => {
   };
 
   return (
-    <table className="mt-4 w-full bg-white border border-gray-300 dark:bg-black">
-      <thead>
+    <div className="mt-4 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+      <table className="w-full bg-white dark:bg-black border-collapse">
+      <thead className="bg-gray-50 dark:bg-gray-800">
         <tr>
           {["ID", ...jsonData.map((col) => (col.name) ), "Actions"].map((col) => (
-            <th className="border p-2" key={col}>
+            <th className="border-b border-gray-200 dark:border-gray-600 p-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400" key={col}>
               {formatColumnName(col)}
             </th>
           ))}
@@ -59,14 +60,14 @@ const DataTable = ({ data, onDataChange }) => {
       <tbody>
         {data.length > 0 ? (
           data.map((record) => (
-            <tr key={record.id}>
-              <td className="border p-2">{record.id}</td>
+            <tr key={record.id} className="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td className="p-3 text-sm text-gray-900 dark:text-gray-100">{record.id}</td>
               {jsonData.map((col) => {
                 const columnName = col.name.trim();
                 const cellValue = record[columnName] || ""; // Get the value for this column
 
                 return (
-                  <td className="border p-2" key={columnName}>
+                  <td className="p-3 text-sm text-gray-900 dark:text-gray-100" key={columnName}>
                     {columnName === "password" || columnName === "pw" ? (
                       <span>********</span> // Mask the password
                     ) : (
@@ -75,9 +76,9 @@ const DataTable = ({ data, onDataChange }) => {
                   </td>
                 );
               })}
-              <td className="border p-2">
+              <td className="p-3">
                 {record.selected === "YES" ? (
-                  <Button className="mr-2 bg-red-800 hover:bg-red-500">Selected</Button>
+                  <Button className="mr-2 bg-green-600 hover:bg-green-500 text-white">Selected</Button>
                 ) : (
                   <Button onClick={() => selectRecord(record.id)} className="mr-2">
                     Select
@@ -89,13 +90,14 @@ const DataTable = ({ data, onDataChange }) => {
           ))
         ) : (
           <tr>
-            <td colSpan={config.tableColumns.split(",").length + 2} className="border text-center p-2">
+            <td colSpan={config.tableColumns.split(",").length + 2} className="p-3 text-center text-gray-500 dark:text-gray-400">
               No records found
             </td>
           </tr>
         )}
       </tbody>
     </table>
+    </div>
   );
 };
 

@@ -1,0 +1,44 @@
+name = "cisco-unity-tts-frontend"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "npm run build"
+cwd = "."
+watch_dir = "src"
+
+[site]
+bucket = "./dist"
+
+# Environment variables for the worker
+[vars]
+NODE_ENV = "production"
+VITE_BRANDING_NAME = "Automate Builders"
+VITE_BRANDING_URL = "http://automate.builders"
+
+# Secrets (set these using wrangler secret put)
+# These are NOT stored in this file for security
+# VITE_ELEVENLABS_API_KEY = "your-elevenlabs-api-key"
+# BACKEND_TUNNEL_URL = "https://your-private-tunnel-url.example.com"
+
+# Routes configuration
+routes = [
+  { pattern = "your-domain.com/*", zone_name = "your-domain.com" }
+]
+
+# Custom headers for security
+[[headers]]
+name = "X-Frame-Options"
+value = "DENY"
+
+[[headers]]
+name = "X-Content-Type-Options"
+value = "nosniff"
+
+[[headers]]
+name = "Referrer-Policy"
+value = "strict-origin-when-cross-origin"
+
+[[headers]]
+name = "Permissions-Policy"
+value = "camera=(), microphone=(), geolocation=()"

@@ -16,6 +16,7 @@ import { ElevenLabsClient } from "elevenlabs";
 import { customSelectStyles, selectClassNames, inputGroupSelectStyles } from "@/lib/select-styles";
 import { useConfig } from "../config/ConfigContext";
 import TimePicker from "@/components/ui/time-picker";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const createOption = (label, value) => ({
   label,
@@ -291,11 +292,17 @@ const Home = () => {
   }, [apiBaseUrl, apiCupiUrl, connectionState.connections]);
 
   return (
-    <div className="min-h-screen p-10 bg-gray-100 dark:bg-black">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-2">Cisco Unity Greetings TTS</h1>
-      <p className="leading-7 [&:not(:first-child)]:mt-6">Configure text-to-speech greetings for your Cisco Unity call handlers. Select a call handler, greeting type, and voice to generate custom announcements.</p>
-
-      <div className={`space-y-5 ${submitProgress.isSubmitting ? "opacity-50" : ""}`}>
+    <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl mb-6">Cisco Unity Greetings TTS</h1>
+      <Card className="mb-8 w-full">
+        <CardHeader>
+          <CardTitle>Configure Greeting</CardTitle>
+          <CardDescription>
+            Configure text-to-speech greetings for your Cisco Unity call handlers. Select a call handler, greeting type, and voice to generate custom announcements.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className={`space-y-5 ${submitProgress.isSubmitting ? "opacity-50" : ""}`}>
         <CreatableSelect
           className="mt-5"
           isClearable
@@ -371,7 +378,9 @@ const Home = () => {
             </Button>
           </>
         )}
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
