@@ -8,7 +8,7 @@
     "dev": "concurrently \"  npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
     "pull": "docker pull ghcr.io/sieteunoseis/unity-tts-backend:master && docker pull ghcr.io/sieteunoseis/unity-tts-frontend:master",
     "start-remote": "docker-compose up",
-    "build": "docker-compose up --build",
+    "build": "cd frontend && npm run build",
     "sync-remote": "git pull upstream main"
   },
   "devDependencies": {
