@@ -16,7 +16,15 @@ export default {
       
       // Handle static assets
       if (env.ASSETS) {
-        return env.ASSETS.fetch(request);
+        const response = await env.ASSETS.fetch(request);
+        
+        // If asset not found and it's not a file request (no extension), serve index.html for SPA routing
+        if (response.status === 404 && !url.pathname.includes('.')) {
+          const indexRequest = new Request(new URL('/', request.url), request);
+          return env.ASSETS.fetch(indexRequest);
+        }
+        
+        return response;
       } else {
         // Fallback for missing assets binding
         return new Response('Assets not configured', { status: 404 });
