@@ -10,7 +10,12 @@ export default {
       }
       
       // Handle static assets
-      return env.ASSETS.fetch(request);
+      if (env.ASSETS) {
+        return env.ASSETS.fetch(request);
+      } else {
+        // Fallback for missing assets binding
+        return new Response('Assets not configured', { status: 404 });
+      }
     } catch (error) {
       console.error('Worker error:', error);
       return new Response(JSON.stringify({ 
