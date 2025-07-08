@@ -19,6 +19,21 @@ const LANGUAGE = process.env.LANGUAGE || "1033";
 app.use(cors());
 app.use(express.json());
 
+// Worker authentication middleware (optional security layer)
+app.use('/api', (req, res, next) => {
+  const workerSecret = process.env.BACKEND_SECRET_KEY;
+  
+  if (workerSecret) {
+    const providedSecret = req.headers['x-worker-secret'];
+    
+    if (!providedSecret || providedSecret !== workerSecret) {
+      return res.status(403).json({ error: 'Forbidden: Invalid worker authentication' });
+    }
+  }
+  
+  next();
+});
+
 const dbDir = './db';
 if (!fs.existsSync(dbDir)){
     fs.mkdirSync(dbDir, { recursive: true });

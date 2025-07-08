@@ -31,10 +31,24 @@ async function handleApiRequest(request, env) {
   // Construct the target URL
   const targetUrl = new URL(url.pathname + url.search, backendUrl);
   
+  // Add authentication headers
+  const headers = new Headers(request.headers);
+  
+  // Option A: Cloudflare Access (if configured)
+  if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
+    headers.set('CF-Access-Client-Id', env.CF_ACCESS_CLIENT_ID);
+    headers.set('CF-Access-Client-Secret', env.CF_ACCESS_CLIENT_SECRET);
+  }
+  
+  // Option B: Custom secret header (fallback)
+  if (env.BACKEND_SECRET_KEY) {
+    headers.set('X-Worker-Secret', env.BACKEND_SECRET_KEY);
+  }
+
   // Create a new request with the same method, headers, and body
   const proxyRequest = new Request(targetUrl, {
     method: request.method,
-    headers: request.headers,
+    headers: headers,
     body: request.body,
   });
   
