@@ -1,0 +1,40 @@
+name = "cuc-audio-tts"
+main = "_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Enable private network access for the worker
+[placement]
+mode = "smart"
+
+[build]
+command = "cd frontend && npm install && npm run build"
+cwd = "."
+watch_dir = "frontend/src"
+
+# Assets configuration for Workers + Assets
+[assets]
+directory = "./frontend/dist"
+binding = "ASSETS"
+
+# Environment variables for the worker
+[vars]
+NODE_ENV = "production"
+VITE_BRANDING_NAME = "Automate Builders"
+VITE_BRANDING_URL = "http://automate.builders"
+VITE_TABLE_COLUMNS = "name, hostname, username, password"
+
+# Secrets (set these using wrangler secret put)
+# These are NOT stored in this file for security
+# VITE_ELEVENLABS_API_KEY = "your-elevenlabs-api-key"
+# BACKEND_TUNNEL_URL = "your-backend-url"
+# CF_ACCESS_CLIENT_ID = "your-cf-access-client-id"
+# CF_ACCESS_CLIENT_SECRET = "your-cf-access-client-secret"
+
+# Routes configuration (commented out for workers.dev deployment)
+# routes = [
+#   { pattern = "your-domain.com/*", zone_name = "your-domain.com" }
+# ]
+
+# Note: Custom headers are configured separately in Cloudflare dashboard
+# for Workers + Assets configuration
